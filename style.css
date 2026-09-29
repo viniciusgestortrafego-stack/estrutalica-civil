@@ -132,3 +132,6 @@ footer a:hover{color:var(--orange)}
 .gallery{grid-template-columns:repeat(4,1fr)}.gallery img{height:420px}.gallery figure:last-child{grid-column:auto}.gallery figure:last-child img{height:420px}
 @media(max-width:1100px){.gallery{grid-template-columns:repeat(2,1fr)}.gallery img,.gallery figure:last-child img{height:380px}}
 @media(max-width:760px){.gallery{grid-template-columns:1fr}.gallery img,.gallery figure:last-child img{height:340px}}
+@media(max-width:760px){h2,.section h2,.nosinal h2,.faq-layout h2{font-size:2.3rem}.closing h2{font-size:2.1rem}.services{grid-template-columns:1fr 1fr}.service{padding:16px 14px}.service h3{font-size:14px}.gallery{grid-template-columns:1fr 1fr;gap:18px 12px}.gallery img,.gallery figure:last-child img{height:210px}.gallery figcaption{display:block;padding-top:8px;font-size:12px;line-height:1.4}.gallery figcaption span{display:none}}
+@media(max-width:760px){.difference-grid>*{min-width:0}.capacity .big{font-size:4.6rem}}
+@media(max-width:380px){h2,.section h2,.nosinal h2,.faq-layout h2{font-size:2.05rem}.gallery img,.gallery figure:last-child img{height:180px}.capacity{padding:26px 22px}.capacity .big{font-size:4rem}.hero-layout>*{min-width:0}h1{font-size:2.35rem}.form-row{grid-template-columns:1fr}.lead-card{padding:24px 18px}}
