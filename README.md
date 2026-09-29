@@ -14,4 +14,4 @@ Abra `index.html` em um navegador ou publique esta pasta em uma hospedagem de si
 
 ## Estado desta versão
 
-Esta versão inclui formulário de cotação na primeira dobra e integração dos cadastros com a guia `ESTRUTALICA CIVIL` do Google Sheets. Os demais botões de contato direcionam ao WhatsApp.
+Versão com nova copy (história, produtos, diferenciais, processo e FAQ), logo recortada em `assets/logo.png`, formulário de cotação na primeira dobra integrado ao Google Sheets e botões de contato pelo WhatsApp.
