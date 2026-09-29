@@ -18,6 +18,8 @@ if (form) {
 
     try {
       await fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'generate_lead', form_id: 'lead-form', tipo_projeto: form.tipo.value || '' });
       form.reset();
       statusMessage.className = 'form-status success';
       statusMessage.textContent = 'Cadastro enviado. Nossa equipe entrará em contato.';
