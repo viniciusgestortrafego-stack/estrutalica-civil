@@ -43,7 +43,7 @@
 .header .brand{width:auto;height:auto;overflow:visible;position:static;display:block}
 .header .brand img{position:static;width:auto;height:64px;max-width:none;left:auto;top:auto}
 nav{gap:22px;font-size:13.5px}
-.hero{position:relative;background:linear-gradient(90deg,#101111f2 0%,#101111d9 55%,#101111b3 100%),url(assets/fabricacao.jpg) center/cover no-repeat}
+.hero{position:relative;background:linear-gradient(90deg,#101111f2 0%,#101111d9 55%,#101111b3 100%),url(assets/guarda-corpo.webp) center/cover no-repeat}
 .hero-layout{position:relative}
 h1{font-size:clamp(2.9rem,5.2vw,5rem);text-transform:uppercase;line-height:1.02}
 @media(min-width:761px){h1{font-size:clamp(2.9rem,5.2vw,5rem)}}
@@ -96,7 +96,7 @@ h1{font-size:clamp(2.9rem,5.2vw,5rem);text-transform:uppercase;line-height:1.02}
 .tags span{border:1px solid var(--orange);color:var(--orange);padding:6px 14px;font-size:13px;font-weight:700}
 .section-head h2{max-width:760px}
 @media(max-width:1100px){nav{display:none}.history{gap:40px}.history-photo img{height:460px}.gallery{grid-template-columns:1fr 1fr}.gallery figure:last-child{grid-column:span 2}.gallery figure:last-child img{height:380px}.nosinal-inner{gap:40px}.facts strong{font-size:36px}.facts>div{padding:0 18px}}
-@media(max-width:760px){.header .brand img{height:48px}.header-inner{height:78px}.hero{background:linear-gradient(#101111ee,#101111f5),url(assets/fabricacao.jpg) center/cover}h1{font-size:clamp(2.6rem,11vw,3.8rem)}.facts{grid-template-columns:1fr 1fr;padding:10px 0 26px}.facts>div{display:block;border:0!important;padding:16px 12px 16px 0}.facts span{text-align:left;max-width:none;font-size:12.5px;margin-top:2px}.facts strong{font-size:28px}.facts small{font-size:19px}.history,.products,.nosinal-inner,.diff-grid{grid-template-columns:1fr;gap:28px}.history-photo img{height:340px}.history .signature{font-size:28px}.services{grid-template-columns:1fr}.service{padding:18px}.service .number{font-size:18px}.product{padding:26px 22px}.product h3{font-size:1.7rem}.gallery{grid-template-columns:1fr}.gallery figure:last-child{grid-column:auto}.gallery img,.gallery figure:last-child img{height:300px}.diff{padding:26px 22px}.nosinal h2{font-size:2.5rem}.cta-dark{width:100%}}
+@media(max-width:760px){.header .brand img{height:48px}.header-inner{height:78px}.hero{background:linear-gradient(#101111ee,#101111f5),url(assets/guarda-corpo.webp) center/cover}h1{font-size:clamp(2.6rem,11vw,3.8rem)}.facts{grid-template-columns:1fr 1fr;padding:10px 0 26px}.facts>div{display:block;border:0!important;padding:16px 12px 16px 0}.facts span{text-align:left;max-width:none;font-size:12.5px;margin-top:2px}.facts strong{font-size:28px}.facts small{font-size:19px}.history,.products,.nosinal-inner,.diff-grid{grid-template-columns:1fr;gap:28px}.history-photo img{height:340px}.history .signature{font-size:28px}.services{grid-template-columns:1fr}.service{padding:18px}.service .number{font-size:18px}.product{padding:26px 22px}.product h3{font-size:1.7rem}.gallery{grid-template-columns:1fr}.gallery figure:last-child{grid-column:auto}.gallery img,.gallery figure:last-child img{height:300px}.diff{padding:26px 22px}.nosinal h2{font-size:2.5rem}.cta-dark{width:100%}}
 #lead-form label{display:block}
 #lead-form label>input,#lead-form label>select,#lead-form label>textarea{margin-top:6px}
 #lead-form label>span{display:inline}
@@ -138,3 +138,10 @@ footer a:hover{color:var(--orange)}
 .products .product:last-child:nth-child(odd){grid-column:1/-1}
 @media(min-width:1101px){.gallery{grid-template-columns:repeat(5,1fr)}.gallery img,.gallery figure:last-child img{height:340px}}
 @media(min-width:1101px){.gallery figcaption{display:block;line-height:1.45}.gallery figcaption span{display:block;margin-top:2px}}
+.hero,.hero:not(#x){background:linear-gradient(90deg,#101111f0 0%,#101111d9 55%,#101111b8 100%),url(assets/guarda-corpo.webp) center/cover no-repeat}
+@media(max-width:760px){.hero,.hero:not(#x){background:linear-gradient(#101111e6,#101111f2),url(assets/guarda-corpo.webp) center/cover no-repeat}}
+.history-photo img{object-position:center 40%}
+.history-cta{margin-top:30px}
+.ig-link{display:inline-flex;align-items:center;gap:10px}.ig-link:hover{color:var(--orange)}.ig-icon{flex-shrink:0}
+@media(min-width:1101px){.gallery{grid-template-columns:repeat(3,1fr)}.gallery img,.gallery figure:last-child img{height:360px}}
+@media(max-width:1100px){.gallery figure:last-child:nth-child(odd){grid-column:1/-1}}
