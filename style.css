@@ -145,3 +145,4 @@ footer a:hover{color:var(--orange)}
 .ig-link{display:inline-flex;align-items:center;gap:10px}.ig-link:hover{color:var(--orange)}.ig-icon{flex-shrink:0}
 @media(min-width:1101px){.gallery{grid-template-columns:repeat(3,1fr)}.gallery img,.gallery figure:last-child img{height:360px}}
 @media(max-width:1100px){.gallery figure:last-child:nth-child(odd){grid-column:1/-1}}
+@media(min-width:1101px){.gallery{grid-template-columns:repeat(4,1fr)}.gallery img,.gallery figure:last-child img{height:340px}}
