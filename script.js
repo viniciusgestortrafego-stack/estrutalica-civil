@@ -18,7 +18,12 @@ document.querySelectorAll('.lead-form').forEach((form) => {
     statusMessage.textContent = '';
 
     try {
-      await fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
+      await fetch(form.action, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), brand: 'estrutalica-civil' }),
+      });
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'generate_lead', form_id: form.id, tipo_projeto: form.tipo.value || '' });
       form.reset();
