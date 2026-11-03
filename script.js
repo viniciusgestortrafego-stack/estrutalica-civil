@@ -1,4 +1,3 @@
-const whatsappUrl = 'https://wa.me/5511941015207?text=Ol%C3%A1%20vim%20dos%20an%C3%BAncios%20e%20quero%20fazer%20uma%20cota%C3%A7%C3%A3o';
 const whatsappNumber = '5511941015207';
 
 const leadWhatsappUrl = (nome, tipo) => {
@@ -25,27 +24,37 @@ document.querySelectorAll('.lead-form').forEach((form) => {
     statusMessage.className = 'form-status';
     statusMessage.textContent = '';
 
+    const leadUrl = leadWhatsappUrl(form.nome.value, form.tipo.value);
+    const payload = JSON.stringify({ ...Object.fromEntries(new FormData(form)), brand: 'estrutalica-civil' });
+    let enviado = true;
+
     try {
-      await fetch(form.action, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), brand: 'estrutalica-civil' }),
-      });
-      const leadUrl = leadWhatsappUrl(form.nome.value, form.tipo.value);
+      // keepalive mantém o envio mesmo depois que a página vai para o WhatsApp;
+      // o limite de 4 s evita que um servidor lento segure a pessoa aqui.
+      await Promise.race([
+        fetch(form.action, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: payload,
+        }),
+        new Promise((resolve) => setTimeout(resolve, 4000)),
+      ]);
+    } catch (error) {
+      enviado = false;
+    }
+
+    if (enviado) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'generate_lead', form_id: form.id, tipo_projeto: form.tipo.value || '' });
       form.reset();
-      statusMessage.className = 'form-status success';
-      statusMessage.innerHTML = `Cadastro enviado! Abrindo o WhatsApp para você falar com nossa equipe… <a href="${leadUrl}">Clique aqui se não abrir</a>.`;
-      setTimeout(() => { window.location.href = leadUrl; }, 1200);
-    } catch (error) {
-      statusMessage.className = 'form-status error';
-      statusMessage.innerHTML = `Não foi possível enviar agora. <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">Fale pelo WhatsApp</a>.`;
-    } finally {
-      button.disabled = false;
-      button.firstChild.textContent = 'Solicitar cotação ';
     }
+    statusMessage.className = enviado ? 'form-status success' : 'form-status error';
+    statusMessage.innerHTML = `${enviado ? 'Cadastro enviado!' : 'Não conseguimos registrar agora, mas você pode falar direto com a gente.'} Abrindo o WhatsApp… <a href="${leadUrl}">Clique aqui se não abrir</a>.`;
+    setTimeout(() => { window.location.href = leadUrl; }, 800);
+    button.disabled = false;
+    button.firstChild.textContent = 'Solicitar cotação ';
   });
 });
 
