@@ -1,5 +1,42 @@
 const whatsappNumber = '5511941015207';
 
+// Parâmetros de campanha (Google Ads: utm_* + ad_id; também gclid/fbclid).
+// Ficam guardados por 30 dias para não se perderem se a pessoa recarregar a página.
+const trackingKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'ad_id', 'gclid', 'gbraid', 'wbraid', 'fbclid'];
+const trackingStorageKey = 'estrutalica_tracking';
+
+const captureTracking = () => {
+  const params = new URLSearchParams(window.location.search);
+  const fromUrl = {};
+  trackingKeys.forEach((key) => {
+    const value = (params.get(key) || '').trim();
+    // Parâmetro do Google sem valor definido chega como "{_origem}": descarta.
+    if (value && !/^\{.*\}$/.test(value)) fromUrl[key] = value;
+  });
+
+  try {
+    if (Object.keys(fromUrl).length) {
+      const data = { ...fromUrl, pagina_entrada: window.location.href, referrer: document.referrer, salvo_em: Date.now() };
+      localStorage.setItem(trackingStorageKey, JSON.stringify(data));
+      return data;
+    }
+    const saved = JSON.parse(localStorage.getItem(trackingStorageKey) || 'null');
+    if (saved && Date.now() - saved.salvo_em < 30 * 24 * 60 * 60 * 1000) return saved;
+  } catch (error) {
+    if (Object.keys(fromUrl).length) return { ...fromUrl, pagina_entrada: window.location.href, referrer: document.referrer };
+  }
+  return { pagina_entrada: window.location.href, referrer: document.referrer };
+};
+
+const tracking = captureTracking();
+const trackingPayload = () => {
+  const data = {};
+  trackingKeys.forEach((key) => { data[key] = tracking[key] || ''; });
+  data.pagina_entrada = tracking.pagina_entrada || window.location.href;
+  data.referrer = tracking.referrer || '';
+  return data;
+};
+
 const leadWhatsappUrl = (nome, tipo) => {
   const primeiroNome = (nome || '').trim().split(/\s+/)[0];
   let mensagem = primeiroNome ? `Olá! Sou ${primeiroNome}, acabei de me cadastrar no site e quero fazer um orçamento` : 'Olá! Acabei de me cadastrar no site e quero fazer um orçamento';
@@ -25,7 +62,7 @@ document.querySelectorAll('.lead-form').forEach((form) => {
     statusMessage.textContent = '';
 
     const leadUrl = leadWhatsappUrl(form.nome.value, form.tipo.value);
-    const payload = JSON.stringify({ ...Object.fromEntries(new FormData(form)), brand: 'estrutalica-civil' });
+    const payload = JSON.stringify({ ...Object.fromEntries(new FormData(form)), ...trackingPayload(), brand: 'estrutalica-civil' });
     let enviado = true;
 
     try {
