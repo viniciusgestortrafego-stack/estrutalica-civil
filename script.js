@@ -1,38 +1,48 @@
 const whatsappNumber = '5511941015207';
 
-// Parâmetros de campanha (Google Ads: utm_* + ad_id; também gclid/fbclid).
-// Ficam guardados por 30 dias para não se perderem se a pessoa recarregar a página.
+// Parâmetros de campanha, com os mesmos nomes de campo do site da Estrutálica Automotiva.
+// Guarda no navegador a primeira visita que chegou com UTM ou ID de clique por 90 dias,
+// para o lead manter a origem mesmo se voltar depois sem os parâmetros.
 const trackingKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'ad_id', 'gclid', 'gbraid', 'wbraid', 'fbclid'];
 const trackingStorageKey = 'estrutalica_tracking';
+const trackingTtl = 90 * 24 * 60 * 60 * 1000;
 
-const captureTracking = () => {
+const readTrackingFromUrl = () => {
   const params = new URLSearchParams(window.location.search);
-  const fromUrl = {};
+  const found = {};
   trackingKeys.forEach((key) => {
     const value = (params.get(key) || '').trim();
-    // Parâmetro do Google sem valor definido chega como "{_origem}": descarta.
-    if (value && !/^\{.*\}$/.test(value)) fromUrl[key] = value;
+    // Parâmetro do Google sem valor chega escrito como "{_midia}": descarta.
+    if (value && !/^\{.*\}$/.test(value)) found[key] = value;
   });
+  return found;
+};
+
+const captureTracking = () => {
+  const fromUrl = readTrackingFromUrl();
+  const current = { ...fromUrl, landing_page: window.location.href, referrer: document.referrer };
 
   try {
+    const saved = JSON.parse(localStorage.getItem(trackingStorageKey) || 'null');
+    if (saved && saved.salvo_em && Date.now() - saved.salvo_em < trackingTtl) return saved;
+
     if (Object.keys(fromUrl).length) {
-      const data = { ...fromUrl, pagina_entrada: window.location.href, referrer: document.referrer, salvo_em: Date.now() };
+      const data = { ...current, salvo_em: Date.now() };
       localStorage.setItem(trackingStorageKey, JSON.stringify(data));
       return data;
     }
-    const saved = JSON.parse(localStorage.getItem(trackingStorageKey) || 'null');
-    if (saved && Date.now() - saved.salvo_em < 30 * 24 * 60 * 60 * 1000) return saved;
   } catch (error) {
-    if (Object.keys(fromUrl).length) return { ...fromUrl, pagina_entrada: window.location.href, referrer: document.referrer };
+    // Sem acesso ao armazenamento do navegador: usa só o que veio na URL desta visita.
   }
-  return { pagina_entrada: window.location.href, referrer: document.referrer };
+  return current;
 };
 
 const tracking = captureTracking();
+
 const trackingPayload = () => {
   const data = {};
   trackingKeys.forEach((key) => { data[key] = tracking[key] || ''; });
-  data.pagina_entrada = tracking.pagina_entrada || window.location.href;
+  data.landing_page = tracking.landing_page || window.location.href;
   data.referrer = tracking.referrer || '';
   return data;
 };
@@ -84,7 +94,18 @@ document.querySelectorAll('.lead-form').forEach((form) => {
 
     if (enviado) {
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'generate_lead', form_id: form.id, tipo_projeto: form.tipo.value || '' });
+      const t = trackingPayload();
+      window.dataLayer.push({
+        event: 'generate_lead',
+        form_id: form.id,
+        tipo_projeto: form.tipo.value || '',
+        utm_source: t.utm_source,
+        utm_medium: t.utm_medium,
+        utm_campaign: t.utm_campaign,
+        utm_content: t.utm_content,
+        utm_term: t.utm_term,
+        ad_id: t.ad_id,
+      });
       form.reset();
     }
     statusMessage.className = enviado ? 'form-status success' : 'form-status error';
