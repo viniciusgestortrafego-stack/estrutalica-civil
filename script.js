@@ -1,4 +1,12 @@
 const whatsappUrl = 'https://wa.me/5511941015207?text=Ol%C3%A1%20vim%20dos%20an%C3%BAncios%20e%20quero%20fazer%20uma%20cota%C3%A7%C3%A3o';
+const whatsappNumber = '5511941015207';
+
+const leadWhatsappUrl = (nome, tipo) => {
+  const primeiroNome = (nome || '').trim().split(/\s+/)[0];
+  let mensagem = primeiroNome ? `Olá! Sou ${primeiroNome}, acabei de me cadastrar no site e quero fazer um orçamento` : 'Olá! Acabei de me cadastrar no site e quero fazer um orçamento';
+  if (tipo) mensagem += ` de ${tipo.toLowerCase()}`;
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`${mensagem}.`)}`;
+};
 
 document.querySelectorAll('.lead-form').forEach((form) => {
   const statusMessage = form.querySelector('.form-status');
@@ -24,11 +32,13 @@ document.querySelectorAll('.lead-form').forEach((form) => {
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), brand: 'estrutalica-civil' }),
       });
+      const leadUrl = leadWhatsappUrl(form.nome.value, form.tipo.value);
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'generate_lead', form_id: form.id, tipo_projeto: form.tipo.value || '' });
       form.reset();
       statusMessage.className = 'form-status success';
-      statusMessage.textContent = 'Cadastro enviado. Nossa equipe entrará em contato.';
+      statusMessage.innerHTML = `Cadastro enviado! Abrindo o WhatsApp para você falar com nossa equipe… <a href="${leadUrl}">Clique aqui se não abrir</a>.`;
+      setTimeout(() => { window.location.href = leadUrl; }, 1200);
     } catch (error) {
       statusMessage.className = 'form-status error';
       statusMessage.innerHTML = `Não foi possível enviar agora. <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">Fale pelo WhatsApp</a>.`;
