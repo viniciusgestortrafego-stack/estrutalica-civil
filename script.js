@@ -1,4 +1,4 @@
-const whatsappUrl = 'https://wa.me/551149630188?text=Ol%C3%A1%20vim%20dos%20an%C3%BAncios%20e%20quero%20fazer%20uma%20cota%C3%A7%C3%A3o';
+const whatsappUrl = 'https://wa.me/5511941015207?text=Ol%C3%A1%20vim%20dos%20an%C3%BAncios%20e%20quero%20fazer%20uma%20cota%C3%A7%C3%A3o';
 
 document.querySelectorAll('.lead-form').forEach((form) => {
   const statusMessage = form.querySelector('.form-status');
